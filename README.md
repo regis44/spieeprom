@@ -9,4 +9,6 @@ available on http://www.arduino.cc/en/Tutorial/SPIEEPROM
 
 by Wagner Sartori Junior <wsartori@gmail.com>
 
-modified to add writeAnything and readAnything functions
+Modified to add writeAnything and readAnything functions
+
+Tested on a 256 bytes AT252256B Atmel's SPI Serial EEPROM
