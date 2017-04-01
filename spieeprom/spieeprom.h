@@ -56,12 +56,14 @@ template <class T> void SPIEEPROM::write(long addr, T& value)
     start_write(); // send WRITE command
 	send_address(addr); // send address
     unsigned int i;
-    for (i = 0; i < sizeof(value); i++)
-          SPI.transfer(*p++);
+    for (i = 0; i < sizeof(value); i++) 
+    {
+    	SPI.transfer(*p++);
+    }
 	digitalWrite(SLAVESELECT,HIGH);
 	while (isWIP()) {
 		delay(1);
-	}          
+	}      
 }
 
 template <class T> void SPIEEPROM::read(long addr, T& value)
@@ -71,8 +73,10 @@ template <class T> void SPIEEPROM::read(long addr, T& value)
 	SPI.transfer(READ); // send READ command
 	send_address(addr); // send address
     unsigned int i;
-    for (i = 0; i < sizeof(value); i++)
-          *p++ = SPI.transfer(0xFF);
+    for (i = 0; i < sizeof(value); i++) 
+    {
+    	*p++ = SPI.transfer(0xFF);
+	}
     digitalWrite(SLAVESELECT,HIGH); //release chip, signal end transfer      
 }
 
