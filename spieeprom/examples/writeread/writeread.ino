@@ -7,6 +7,7 @@ SPIEEPROM eeprom(0); // parameter is type
 
 float testWrite[8] = {1, 2, 3, 4, 5, 6, 7, 8};
 float testRead[8];
+long address = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -15,7 +16,6 @@ void setup() {
 }
 
 void loop() {
-  long address = 0;
   eeprom.write(address, testWrite);
   eeprom.read(address, testRead);
   for (int i = 0; i < 8; i++)
