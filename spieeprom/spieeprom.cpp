@@ -32,14 +32,15 @@ SPIEEPROM::SPIEEPROM(byte type) {
 void SPIEEPROM::begin() {
 	pinMode(SLAVESELECT, OUTPUT);
 	SPI.begin();
+	SPI.setBitOrder(MSBFIRST);
+    SPI.setDataMode(SPI_MODE0); 
+    SPI.setClockDivider(SPI_CLOCK_DIV64);
 }
 
 void SPIEEPROM::send_address(long addr) {
-	if (eeprom_type == 1) {
-		SPI.transfer((byte)(addr>>16));
-	}
-	SPI.transfer((byte)(addr>>8));
-	SPI.transfer((byte)(addr));
+	SPI.transfer((byte)(addr >> 16));	
+  	SPI.transfer((byte)(addr >> 8));
+  	SPI.transfer((byte)(addr));	
 }
 
 void SPIEEPROM::start_write() {
@@ -52,17 +53,9 @@ void SPIEEPROM::start_write() {
 
 bool SPIEEPROM::isWIP() {
 	byte data;
-	
 	digitalWrite(SLAVESELECT,LOW);
 	SPI.transfer(RDSR); // send RDSR command
-	
 	data = SPI.transfer(0xFF); //get data byte
-	
 	digitalWrite(SLAVESELECT,HIGH);
-	
 	return (data & (1 << 0));
 }
-
-
-
-
