@@ -24,7 +24,7 @@ void loop() {
     Serial.print(" ");
   }
   Serial.println();
-  address += 8;
+  address += sizeof(testWrite);
   for (int i = 0; i < 8; i++)
   {
     testWrite[i] += 8;
