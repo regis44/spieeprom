@@ -5,7 +5,7 @@ SPIEEPROM eeprom(0); // parameter is type
                      // type = 1: 24-bits address
                      // type > 1: defaults to type 0
 
-float testWrite[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+float testWrite[8] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0};
 float testRead[8];
 long address = 0;
 
@@ -24,7 +24,7 @@ void loop() {
     Serial.print(" ");
   }
   Serial.println();
-  address += sizeof(testWrite);
+  address += 32; // 4 bytes per float value -> 8x4 bytes
   for (int i = 0; i < 8; i++)
   {
     testWrite[i] += 8;
