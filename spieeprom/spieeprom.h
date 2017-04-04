@@ -32,7 +32,6 @@
 class SPIEEPROM
 {
   private:
-	long address;
 	byte eeprom_type;
 	
 	void send_address(long addr);
@@ -40,44 +39,42 @@ class SPIEEPROM
 	bool isWIP(); // is write in progress?
 	
   public:
-	SPIEEPROM(); // default to type 0
+	SPIEEPROM(); 		  // default to type 0
     SPIEEPROM(byte type); // type=0: 16-bits address
 						  // type=1: 24-bits address
-						  // type>1: defaults to type 0
-						
+						  // type>1: defaults to type 0	
 	void begin();
-	template <class T> void write(long addr, T& value);
-	template <class T> void read(long addr, T& value);
-};
 
-template <class T> void SPIEEPROM::write(long addr, T& value)
-{
-    byte* p = (byte*)(void*)&value;
-    start_write(); // send WRITE command
-	send_address(addr); // send address
-    unsigned int i;
-    for (i = 0; i < sizeof(value); i++) 
-    {
-    	SPI.transfer(*p++);
-    }
-	digitalWrite(SLAVESELECT,HIGH);
-	while (isWIP()) {
-		delay(1);
-	}      
-}
-
-template <class T> void SPIEEPROM::read(long addr, T& value)
-{
-    byte* p = (byte*)(void*)&value;
-    digitalWrite(SLAVESELECT,LOW);
-	SPI.transfer(READ); // send READ command
-	send_address(addr); // send address
-    unsigned int i;
-    for (i = 0; i < sizeof(value); i++) 
-    {
-    	*p++ = SPI.transfer(0xFF);
+	template <typename T> T &write(long addr, T &value)
+	{
+	    byte *p = (byte*) &value;
+	    start_write(); // send WRITE command
+		send_address(addr); // send address
+	    unsigned int i;
+	    for (i = 0; i < sizeof(value); i++) 
+	    {
+	    	SPI.transfer(*p++);
+	    }
+		digitalWrite(SLAVESELECT,HIGH);
+		while (isWIP()) {	
+			delay(1);
+		}  
+	    digitalWrite(SLAVESELECT,HIGH);
 	}
-    digitalWrite(SLAVESELECT,HIGH); //release chip, signal end transfer      
-}
+
+	template <typename T> T &read(long addr, T &value)
+	{	
+	    byte* p = (byte*)(void*)&value;
+	    digitalWrite(SLAVESELECT,LOW);
+		SPI.transfer(READ); // send READ command
+		send_address(addr); // send address
+    	unsigned int i;
+    	for (i = 0; i < sizeof(value); i++) 
+    	{
+    		*p++ = SPI.transfer(0xFF);
+		}
+    	digitalWrite(SLAVESELECT,HIGH); //release chip, signal end transfer 
+	}
+};
 
 #endif // SPIEEPROM_h

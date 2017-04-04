@@ -17,7 +17,6 @@
 
 SPIEEPROM::SPIEEPROM() {
 	eeprom_type = 0;
-	address = 0;
 }
 
 SPIEEPROM::SPIEEPROM(byte type) {
@@ -26,7 +25,6 @@ SPIEEPROM::SPIEEPROM(byte type) {
 	} else {
 		eeprom_type = type;
 	}
-	address = 0;
 }
 
 void SPIEEPROM::begin() {
@@ -38,7 +36,7 @@ void SPIEEPROM::begin() {
 }
 
 void SPIEEPROM::send_address(long addr) {
-	SPI.transfer((byte)(addr >> 16));	
+	if (eeprom_type == 1) SPI.transfer((byte)(addr >> 16));	
   	SPI.transfer((byte)(addr >> 8));
   	SPI.transfer((byte)(addr));	
 }
@@ -59,3 +57,12 @@ bool SPIEEPROM::isWIP() {
 	digitalWrite(SLAVESELECT,HIGH);
 	return (data & (1 << 0));
 }
+
+
+
+
+
+
+
+
+
